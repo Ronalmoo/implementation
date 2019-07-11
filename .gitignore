@@ -100,5 +100,14 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Pycharm project settings
+.idea
+
 # mypy
 .mypy_cache/
+
+# PyTorch ckpt
+*.tar
+
+# Tensorboard
+events.out.tfevents.*
