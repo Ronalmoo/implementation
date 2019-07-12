@@ -64,6 +64,67 @@ class Vocab:
     def unknown_token(self):
         return self._unknown_token
 
+    @property
+    def bos_token(self):
+        return self._bos_token
+
+    @property
+    def eos_token(self):
+        return self._eos_token
+
+    @property
+    def embedding(self):
+        return self._embedding
+
+    @embedding.setter
+    def embedding(self, array):
+        self._embedding = array
 
 
+class Tokenizer:
+    """Tokenizer class"""
+    def __init__(self, vocab: Vocab, split_fn: Callable[[str], List[str]],
+                 pad_fn: Callable[[List[int]], List[int]] = None) -> None:
+        """Instantiating Tokenizer class
+        Args:
+            vocab (model.utils.Vocab): the instance of model.utils.Vocab created from specific split_fn
+            split_fn (Callable): a function that can act as a splitter
+            pad_fn (Callable): a function that can act as a padder
+        """
+        self._vocab = vocab
+        self._split = split_fn
+        self._pad = pad_fn
 
+    def split(self, string: str) -> List[str]:
+        list_of_tokens = self._split(string)
+        return list_of_tokens
+
+    def transform(self, list_of_tokens: List[str]) -> List[int]:
+        list_of_indices = self._vocab.to_indices(list_of_tokens)
+        list_of_indices = self._pad(list_of_indices) if self._pad else list_of_indices
+        return list_of_indices
+
+    def split_and_transform(self, string: str) -> List[int]:
+        return self.transform(self.split(string))
+
+    @property
+    def vocab(self):
+        return self._vocab
+
+
+class PadSequence:
+    def __init__(self, length: int, pad_val: int = 0, clip: bool = True) -> None:
+
+        self._length = length
+        self._pad_val = pad_val
+        self._clip = clip
+
+    def __call__(self, sample):
+        sample_length = len(sample)
+        if sample_length >= self._length:
+            if self._clip and sample_length > self._length:
+                return sample[:self._length]
+            else:
+                return sample
+        else:
+            return sample + [self._pad_val for _ in range(self._length - sample_length)]
