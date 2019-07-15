@@ -12,7 +12,7 @@ class Corpus(Dataset):
         :param filepath: filepath
         :param transform_fn: a function that can act as a transformer
         """
-        self._corpus = pd.read_csv(filepath, sep='\t').loc[:, ['document'], ['label']]
+        self._corpus = pd.read_csv(filepath, sep='\t').loc[:, ['document', 'label']]
         self._transform = transform_fn
 
     def __len__(self) -> int:
@@ -22,4 +22,3 @@ class Corpus(Dataset):
         tokens2indices = torch.tensor(self._transform(self._corpus.iloc[idx]['document']))
         label = torch.tensor(self._corpus.iloc[idx]['label'])
         return tokens2indices, label
-    
