@@ -25,7 +25,7 @@ class Corpus(Dataset):
         label = torch.tensor(self._corpus.iloc[idx]['label'])
         return token2indices, label
 
-def bathcify(data):
+def batchify(data):
     """
     custom collate_fn for DataLoader
     :param data: list of torch.Tensors
