@@ -16,11 +16,11 @@ jongsung_list = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ',
 
 list_of_jamos = sorted(set(chosung_list + jungsung_list + jongsung_list))
 counter = nlp.data.count_tokens(itertools.chain.from_iterable(list_of_jamos))
-# vocab = nlp.Vocab(counter, bos_token=None, eos_token=None)
-vocab = torchtext.vocab.Vocab(counter)
+vocab = nlp.Vocab(counter, bos_token=None, eos_token=None)
+# vocab = torchtext.vocab.Vocab(counter)
 # connecting SISG embedding with vocab
-# ptr_embedding = nlp.embedding.create('fasttext', source='wiki.ko')
-# vocab.set_embedding(ptr_embedding)
+ptr_embedding = nlp.embedding.create('fasttext', source='wiki.ko')
+vocab.set_embedding(ptr_embedding)
 
 with open('data/vocab.pkl', mode='wb') as io:
     pickle.dump(vocab, io)

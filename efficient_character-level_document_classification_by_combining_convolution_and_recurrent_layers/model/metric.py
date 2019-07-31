@@ -3,7 +3,7 @@ from tqdm import tqdm
 
 
 def evaluate(model, data_loader, metrics, device):
-    if model.traing:
+    if model.training:
         model.eval()
 
     summary = {metric: 0 for metric in metrics}
