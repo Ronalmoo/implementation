@@ -6,7 +6,7 @@ from gluonnlp import Vocab
 
 class VDCNN(nn.Module):
     """Very Deep CNN"""
-    def __init__(self, num_classes, embedding_dim, k_max, vocab=Vocab):
+    def __init__(self, num_classes: int, embedding_dim: int, k_max: int, vocab: Vocab) -> None:
         """
 
         :param num_classes: the number of classes
@@ -15,7 +15,7 @@ class VDCNN(nn.Module):
         :param vocab: gluonnlp
         """
         super(VDCNN, self).__init__()
-        self._structure = nn.Sequential(nn.Embedding(len(vocab), embedding_dim, vocab.to_indices(vocab.padding_token)),
+        self._structure = nn.Sequential(nn.Embedding(16, embedding_dim, 0),
                                         Permute(),
                                         nn.Conv1d(embedding_dim, 64, kernel_size=(3, 1, 1)),
                                         ConvBlock(64, 64),
