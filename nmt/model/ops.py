@@ -75,4 +75,20 @@ class Attention(nn.Module):
         hidden = hidden.unsqueeze(1).repear(1, src_len, 1)
         encoder_outputs = encoder_outputs.permute(1, 0, 2)
 
-        # hidden = [
+        # hidden = [batch_size, src_sent_len, dec_hid_dim]
+        # encoder_outputs = [batch_size, src_sent_len, enc_hid_dim * 2]
+
+        energy = torch.tanh(self.attn(torch.cat((hidden, encoder_outputs), dim=2)))
+
+        # energy = [batch_size, src_sent_len, dec_hid_dim]
+        energy = energy.permute(0, 2, 1)
+        # energy = [batch_size, dec_hid_dim, src_sent_len]
+        # v = [dec_hid_dim]
+        v = self.v.repeat(batch_size, 1).unsqueeze(1)
+        # v = [batch_size, 1, dec_hid_dim]
+        attention = torch.bmm(v, energy).squeeze(1)
+        # attention = [batch_size, src_len]
+        return F.softmax(attention, dim=1)
+
+
+
