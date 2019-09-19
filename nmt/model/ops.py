@@ -68,3 +68,11 @@ class Attention(nn.Module):
     def forward(self, hidden, encoder_outputs):
         # hidden = [batch_size, dec_hid_dim]
         # encoder_outputs = [src_sent_len, batch_size, enc_hid_dim * 2]
+        batch_size = encoder_outputs.shape[1]
+        src_len = encoder_outputs.shape[0]
+
+        # repeat encoder hidden state src_len times
+        hidden = hidden.unsqueeze(1).repear(1, src_len, 1)
+        encoder_outputs = encoder_outputs.permute(1, 0, 2)
+
+        # hidden = [
